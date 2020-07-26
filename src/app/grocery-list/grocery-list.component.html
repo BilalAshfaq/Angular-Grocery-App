@@ -1,0 +1,41 @@
+
+<input type="text" class="grocery-input" placeholder="Write Item Name Here! " [(ngModel)]="gorceryTitle" (keyup.enter)="addGrocery()">
+
+<div class="grocery-item" *ngFor="let grocery of filterOnClick()">
+
+  <div class="grocery-item-left">
+
+    <input type="checkbox" [(ngModel)]="grocery.bought">
+
+    <div *ngIf="!grocery.editing; else editingGrocery" class="grocery-item-label" [ngClass]="{'bought' : grocery.bought}" (dblclick)="editGrocery(grocery)"> {{grocery.title}} </div>
+
+    <ng-template #editingGrocery>
+      <input type="text" class = "grocery-item-edit" [(ngModel)]="grocery.title" (blur)="doneEdit(grocery)" (keyup.enter)="doneEdit(grocery)" 
+      (keyup.esc)="cancelEdit(grocery)" autofocus>
+    </ng-template>
+
+  </div>
+
+  <div class = "remove-item" (click)="removeGrocery(grocery.id)"> &times; </div>
+</div>
+
+<div class ="extra-container">
+  
+  <div><label> <input type ="checkbox" (change)="checkAllGroceries()"> check All </label></div>
+  <div> {{remainingGroceries()}} Grocery Items Left</div>
+
+</div>
+
+<div class ="extra-container">
+  
+  <div>
+    <button [ngClass]="{'active': filter === 'all'}" (click)="filter='all'">All</button>
+    <button [ngClass]="{'active': filter === 'Not Bought'}" (click)="filter='Not Bought'">Not Bought</button>
+    <button [ngClass]="{'active': filter === 'Bought'}" (click)="filter='Bought'">Bought</button>
+  </div>
+ 
+<div *ngIf="ifOneIsBought()" (click)="clearBoughtItems()">
+  <button>Clear Bought Items</button>
+</div>
+
+</div>
